@@ -6,7 +6,7 @@ import torch
 
 
 def export_pytorch_model():
-    net = models.resnet18(pretrained=True)
+    net = models.resnet18(pretrained=False)
     net.eval()
     trace_model = torch.jit.trace(net, torch.Tensor(1,3,224,224))
     trace_model.save('./resnet18.pt')
