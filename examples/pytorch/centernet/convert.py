@@ -236,17 +236,21 @@ if __name__ == '__main__':
                     , "wide_resnet50_2":models.wide_resnet50_2
                     , "centernet_mbv2": None
                     , "centernet_res50": None
+                    , "centernet_hourglass": None
                     }.items():
-        print(netstr)
-        if netstr != "centernet_mbv2":
+        if netstr != "centernet_res50":
             continue
+
+        print(netstr)
         if netstr == "centernet_mbv2":
             import sys
             sys.path.append('/workspace/centernet/src/lib')
             from models.model import create_model, load_model
             net = create_model('mobilenetv2liteheadtrans', {'hm': 29, 'wh': 2, 'reg': 2}, 256)
+            net = load_model(net, '/workspace/centernet/exp/ctdet/mobilenetv2liteheadtrans_288x384/model_200.pth')
             inputT = torch.Tensor(1,3,288,384)
             input_size_list = [[3,288,384]]
+            dataset_path = './baiguang-val-dataset.txt'
         elif netstr == "centernet_res50":
             import sys
             sys.path.append('/workspace/centernet/src/lib')
@@ -254,10 +258,20 @@ if __name__ == '__main__':
             net = create_model('res_50', {'hm': 29, 'wh': 2, 'reg': 2}, 256)
             inputT = torch.Tensor(1,3,288,384)
             input_size_list = [[3,288,384]]
+            dataset_path = './dataset.txt'
+        elif netstr == "centernet_hourglass":
+            import sys
+            sys.path.append('/workspace/centernet/src/lib')
+            from models.model import create_model, load_model
+            net = create_model('hourglass', {'hm': 29, 'wh': 2, 'reg': 2}, 256)
+            inputT = torch.Tensor(1,3,512,512)
+            input_size_list = [[3,512,512]]
+            dataset_path = './dataset.txt'
         else:
             net = F(pretrained=False)
             inputT = torch.Tensor(1,3,224,224)
             input_size_list = [[3,224,224]]
+            dataset_path = './dataset.txt'
 
         net.eval()
         trace_model = torch.jit.trace(net, inputT)
@@ -285,7 +299,7 @@ if __name__ == '__main__':
         # Build model
         print('--> Building model')
         # ret = rknn.build(do_quantization=False, pre_compile=True)
-        ret = rknn.build(do_quantization=True, dataset='./dataset.txt', pre_compile=True)
+        ret = rknn.build(do_quantization=True, dataset=dataset_path, pre_compile=True)
         if ret != 0:
             print('Build pytorch failed!')
             exit(ret)
