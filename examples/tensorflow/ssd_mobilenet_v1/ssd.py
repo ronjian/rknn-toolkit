@@ -4,7 +4,7 @@ import re
 import math
 import random
 import cv2
-
+import time
 from rknn.api import RKNN
 
 INPUT_SIZE = 300
@@ -96,7 +96,9 @@ if __name__ == '__main__':
 
     # Inference
     print('--> Running model')
+    tic = time.time()
     outputs = rknn.inference(inputs=[img])
+    print('inference cost {} s', time.time() - tic)
     print('done')
 
     predictions = outputs[0].reshape((1, NUM_RESULTS, 4))
