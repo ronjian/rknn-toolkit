@@ -114,7 +114,7 @@ if __name__ == '__main__':
 
         # Skip the first catch-all class.
         for j in range(1, NUM_CLASSES):
-            score = expit(outputClasses[0][i][j]);
+            score = expit(outputClasses[0][i][j])
 
             if score > topClassScore:
                 topClassScoreIndex = j
