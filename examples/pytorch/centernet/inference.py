@@ -19,7 +19,7 @@ assert ret == 0
 
 for imgname in os.listdir(val_dir):
     if not imgname.endswith('.jpeg'): continue
-    # if imgname != 'StereoVision_L_990964_10_0_0_5026_D_FakePoop_719_-149.jpeg': continue
+    if imgname != 'StereoVision_L_990964_10_0_0_5026_D_FakePoop_719_-149.jpeg': continue
     print(imgname)
     origin_img = cv2.imread(val_dir + imgname)
     input_img = cv2.resize(origin_img, (image_width, image_height))
@@ -56,5 +56,9 @@ for imgname in os.listdir(val_dir):
                         y1 = int(max((((h + yreg) - height / 2.0) * downSampleScale - pad) / image_height, 0.0) * origin_height)
                         x2 = int(min(((w + xreg) + width / 2.0) * downSampleScale / image_width, 1.0) * origin_width)
                         y2 = int(min((((h + yreg) + height / 2.0) * downSampleScale - pad) / image_height, 1.0) * origin_height)
-                        # print(label, score, x1, y1, x2, y2)
                         wf.write(" " + str(x1) + "," + str(y1) + "," + str(x2) + "," + str(y2) + "," + str(label) + "," + str(score))
+                        if score > 0.5:
+                            print(label, score, x1, y1, x2, y2)
+                            origin_img = cv2.rectangle(origin_img, (x1,y1), (x2,y2), (255,0,0), 5)
+    cv2.imwrite('./assets/result-vis.jpg', origin_img)
+rknn.release()
