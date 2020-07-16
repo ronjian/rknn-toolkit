@@ -8,7 +8,7 @@ image_width = 384
 image_height = 288
 pad = 0
 origin_width = 1280
-origin_height = 1920
+origin_height = 960
 val_dir = '/workspace/centernet/data/baiguang/images/val/'
 txt_dir = './assets/baiguang_text/'
 
@@ -22,6 +22,7 @@ for imgname in os.listdir(val_dir):
     if imgname != 'StereoVision_L_990964_10_0_0_5026_D_FakePoop_719_-149.jpeg': continue
     print(imgname)
     origin_img = cv2.imread(val_dir + imgname)
+    print(origin_img.shape)
     input_img = cv2.resize(origin_img, (image_width, image_height))
     ret = rknn.init_runtime()
     assert ret == 0
@@ -40,6 +41,7 @@ for imgname in os.listdir(val_dir):
     wh = outputs[2]
     reg = outputs[3]
     _,C,H,W = hm.shape
+    print(hm.shape)
     with open(txt_dir + imgname.replace('.jpeg', '.txt'), 'w') as wf:
         wf.write(val_dir + imgname)
         for c in range(C):

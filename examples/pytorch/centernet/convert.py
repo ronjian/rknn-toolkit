@@ -251,6 +251,7 @@ if __name__ == '__main__':
             inputT = torch.Tensor(1,3,288,384)
             input_size_list = [[3,288,384]]
             dataset_path = './baiguang-val-dataset.txt'
+            analysis_path = './baiguang_anaysis.txt'
         elif netstr == "centernet_res50":
             import sys
             sys.path.append('/workspace/centernet/src/lib')
@@ -286,7 +287,18 @@ if __name__ == '__main__':
         # pre-process config
         print('--> config model')
         if netstr == "centernet_mbv2":
-            rknn.config(channel_mean_value='123.675 116.28 103.53 58.395', reorder_channel='0 1 2')
+            rknn.config(channel_mean_value='123.675 116.28 103.53 58.395'
+                        , reorder_channel='0 1 2'
+                        , target_platform='rv1126'
+                        , batch_size = 200
+                        # , quantized_dtype='asymmetric_quantized-u8'
+                        # , quantized_dtype='dynamic_fixed_point-8'
+                        , quantized_dtype='dynamic_fixed_point-16'
+                        )
+            # rknn.config(channel_mean_value='123.675 116.28 103.53 58.395'
+            #             , reorder_channel='0 1 2'
+            #             , target_platform='rv1126'
+            #             )
         else:
             rknn.config(channel_mean_value='123.675 116.28 103.53 58.395', reorder_channel='0 1 2', target_platform='rv1126')
         print('done')
@@ -303,7 +315,8 @@ if __name__ == '__main__':
         print('--> Building model')
         
         if netstr == "centernet_mbv2":
-            ret = rknn.build(do_quantization=True, dataset=dataset_path, pre_compile=False)
+            ret = rknn.build(do_quantization=True, dataset=dataset_path, pre_compile=True)
+            # ret = rknn.build(do_quantization=False, pre_compile=True)
         else:
             # ret = rknn.build(do_quantization=False, pre_compile=True)
             ret = rknn.build(do_quantization=True, dataset=dataset_path, pre_compile=True)
@@ -318,4 +331,12 @@ if __name__ == '__main__':
         if ret != 0:
             print('Export {}.rknn failed!'.format(netstr))
             exit(ret)
+        print('done')
+
+        # analysis
+        if netstr == "centernet_mbv2":
+            print('--> Analysis')
+            rknn.accuracy_analysis(analysis_path, output_dir='./snapshot', calc_qnt_error=True)
+
+
         print('done')

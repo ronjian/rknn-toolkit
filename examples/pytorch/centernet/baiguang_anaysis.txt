@@ -1,0 +1,1 @@
+/workspace/centernet/data/baiguang/images/val/StereoVision_L_1025265_8_0_1_12777.jpeg
