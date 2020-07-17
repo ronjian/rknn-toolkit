@@ -231,14 +231,17 @@ if __name__ == '__main__':
     for netstr, F in {"resnet18": models.resnet18
                     , "squeezenet1_0":models.squeezenet1_0
                     , "mobilenet_v2":models.mobilenet_v2
+                    , "mobilenet_v2_batch8":models.mobilenet_v2
                     , "resnet50":models.resnet50
+                    , "resnet50_batch8":models.resnet50
                     , "mnasnet1_0":models.mnasnet1_0
                     , "wide_resnet50_2":models.wide_resnet50_2
                     , "centernet_mbv2": None
                     , "centernet_res50": None
                     , "centernet_hourglass": None
+                    , "dilation": None
                     }.items():
-        if netstr != "centernet_mbv2":
+        if netstr != "mobilenet_v2_batch8":
             continue
 
         print(netstr)
@@ -267,6 +270,23 @@ if __name__ == '__main__':
             net = create_model('hourglass', {'hm': 29, 'wh': 2, 'reg': 2}, 256)
             inputT = torch.Tensor(1,3,512,512)
             input_size_list = [[3,512,512]]
+            dataset_path = './dataset.txt'
+        elif netstr == "dilation":
+            class dilation(nn.Module):
+                def __init__(self,):
+                    super(dilation,self).__init__()
+                    self.dia = nn.Conv2d(3,16,3,1,1,dilation=2)
+                def forward(self,x):
+                    x = self.dia(x)
+                    return x
+            net = dilation()
+            inputT = torch.Tensor(1,3,224,224)
+            input_size_list = [[3,224,224]]
+            dataset_path = './dataset.txt'
+        elif netstr == "resnet50_batch8" or netstr == "mobilenet_v2_batch8":
+            net = F(pretrained=False)
+            inputT = torch.Tensor(8,3,224,224)
+            input_size_list = [[3,224,224]]
             dataset_path = './dataset.txt'
         else:
             net = F(pretrained=False)
@@ -317,6 +337,8 @@ if __name__ == '__main__':
         if netstr == "centernet_mbv2":
             ret = rknn.build(do_quantization=True, dataset=dataset_path, pre_compile=True)
             # ret = rknn.build(do_quantization=False, pre_compile=True)
+        elif netstr == "resnet50_batch8" or netstr == "mobilenet_v2_batch8":
+            ret = rknn.build(do_quantization=True, dataset=dataset_path, pre_compile=True, rknn_batch_size=8)
         else:
             # ret = rknn.build(do_quantization=False, pre_compile=True)
             ret = rknn.build(do_quantization=True, dataset=dataset_path, pre_compile=True)
