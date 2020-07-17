@@ -9,7 +9,7 @@ if __name__ == '__main__':
 
         # pre-process config
         print('--> config model')
-        rknn.config(channel_mean_value='123.675 116.28 103.53 58.395', reorder_channel='0 1 2', target_platform='rv1126', batch_size = 200)
+        rknn.config(channel_mean_value='123.675 116.28 103.53 58.395', reorder_channel='0 1 2', target_platform='rv1126', batch_size = 10)
         print('done')
 
         # Load pytorch model
@@ -22,11 +22,11 @@ if __name__ == '__main__':
 
         # Build model
         print('--> Building model')
-        # ret = rknn.build(do_quantization=True, dataset='dataset.txt', pre_compile=True, rknn_batch_size=1)
-        ret = rknn.build(do_quantization=True
-                        , dataset='/workspace/rockchip/RV1126_RV1109/rv1126_rv1109/external/rknn-toolkit/examples/pytorch/centernet/baiguang-val-dataset.txt'
-                        , pre_compile=True
-                        , rknn_batch_size=1)
+        ret = rknn.build(do_quantization=False, pre_compile=True, rknn_batch_size=1)
+        # ret = rknn.build(do_quantization=True
+        #                 , dataset='baiguang-val-dataset.txt'
+        #                 , pre_compile=True
+        #                 , rknn_batch_size=1)
         if ret != 0:
             print('Build pytorch failed!')
             exit(ret)
@@ -40,7 +40,7 @@ if __name__ == '__main__':
             exit(ret)
         print('done')
 
-        print('--> Analysis')
-        rknn.accuracy_analysis('/workspace/rockchip/RV1126_RV1109/rv1126_rv1109/external/rknn-toolkit/examples/pytorch/centernet/baiguang_anaysis.txt'
-                                , output_dir='./snapshot', calc_qnt_error=True)
-        print('done')
+        # print('--> Analysis')
+        # rknn.accuracy_analysis('/workspace/rockchip/RV1126_RV1109/rv1126_rv1109/external/rknn-toolkit/examples/pytorch/centernet/baiguang_anaysis.txt'
+        #                         , output_dir='./snapshot', calc_qnt_error=True)
+        # print('done')
