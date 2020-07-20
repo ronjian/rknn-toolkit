@@ -3,3 +3,5 @@
 *.pb
 
 assets
+
+examples/pytorch/yolov5s/snapshot

@@ -7,8 +7,8 @@ from tensorflow.python.util import compat
 
 #%%
 with tf.Session() as persisted_sess:
-    # with gfile.FastGFile("./yolov3_darknet_608.pb",'rb') as f:
-    with gfile.FastGFile("../ssd_mobilenet_v1/ssd_mobilenet_v1_coco_2017_11_17.pb",'rb') as f:
+    with gfile.FastGFile("./efficientdet-d0_frozen.pb",'rb') as f:
+    # with gfile.FastGFile("../ssd_mobilenet_v1/ssd_mobilenet_v1_coco_2017_11_17.pb",'rb') as f:
         graph_def = tf.GraphDef()
         graph_def.ParseFromString(f.read())
         persisted_sess.graph.as_default()
@@ -18,4 +18,3 @@ with tf.Session() as persisted_sess:
         for op in persisted_sess.graph.get_operations():
             print(op.name, op.type)
 
-# %%
