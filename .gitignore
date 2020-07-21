@@ -1,5 +1,5 @@
 *.pt
-*.rknn
+*.rknn*
 *.pb
 
 assets
