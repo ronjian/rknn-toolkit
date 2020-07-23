@@ -15,6 +15,7 @@ import os
 class_cnt = 29
 an_vec = class_cnt + 1 + 4
 an_c = an_vec * 3
+image_width = 640
 
 def clip(val):
     return min(max(val, 0.0), 1.0)
@@ -55,8 +56,7 @@ if __name__ == "__main__":
 
     origin_img = cv2.imread('/workspace/centernet/data/baiguang/images/val/StereoVision_L_990964_10_0_0_5026_D_FakePoop_719_-149.jpeg')
     origin_height, origin_width, _ = origin_img.shape
-    image_width = 640
-    image_height = int(image_width/1280*960)
+    image_height = int(image_width / origin_width * origin_height)
     pad_top = (image_width - image_height) // 2
     pad_bottom = image_width - image_height - pad_top
     input_img = cv2.resize(origin_img, (image_width, image_height))
