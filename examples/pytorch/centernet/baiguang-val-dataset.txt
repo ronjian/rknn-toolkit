@@ -67,7 +67,6 @@
 /workspace/centernet/data/baiguang/images/val/StereoVision_L_11458455_-13_0_0_3063.jpeg
 /workspace/centernet/data/baiguang/images/val/StereoVision_L_11470755_10_0_0_538.jpeg
 /workspace/centernet/data/baiguang/images/val/StereoVision_L_1147715_-23_0_1_3216.jpeg
-/workspace/centernet/data/baiguang/images/val/StereoVision_L_11478900_9_0_0_660.jpeg
 /workspace/centernet/data/baiguang/images/val/StereoVision_L_11495087_0_0_0_13122_D_Shoe_-4491_971.jpeg
 /workspace/centernet/data/baiguang/images/val/StereoVision_L_11495743_0_0_0_13132_D_Shoe_-4440_989.jpeg
 /workspace/centernet/data/baiguang/images/val/StereoVision_L_11527025_-3_0_0_13601.jpeg
