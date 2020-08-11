@@ -6,7 +6,7 @@ PC=False
 if __name__ == '__main__':
         # Create RKNN object
         rknn = RKNN()
-        input_size_list = [[3,512,672]]
+        input_size_list = [[3,256,336]]
 
         # pre-process config
         print('--> config model')
@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
         # Load pytorch model
         print('--> Loading model')
-        ret = rknn.load_pytorch(model='/workspace/yolov5/weights/best_yolov5s_robo_inconv_jit_v2.pt', input_size_list=input_size_list)
+        ret = rknn.load_pytorch(model='/workspace/yolov5/weights/best_yolov5s_robo_inconv_jit_v2_half.pt', input_size_list=input_size_list)
         if ret != 0:
             print('Load pytorch model failed!')
             exit(ret)
@@ -47,8 +47,8 @@ if __name__ == '__main__':
                 ret = rknn.build(do_quantization=False, pre_compile=True)
             else:
                 ret = rknn.build(do_quantization=True
-                            , dataset='/workspace/rockchip/RV1126_RV1109/rv1126_rv1109/external/rknn-toolkit/examples/pytorch/centernet/baiguang-val-dataset.txt'
-                            # , dataset='./dataset.txt'
+                            # , dataset='/workspace/rockchip/RV1126_RV1109/rv1126_rv1109/external/rknn-toolkit/examples/pytorch/centernet/baiguang-val-dataset.txt'
+                            , dataset='./dataset.txt'
                             , pre_compile=True
                             , rknn_batch_size=1)
         if ret != 0:
@@ -64,14 +64,14 @@ if __name__ == '__main__':
             if FLOAT:
                 ret = rknn.export_rknn('./best_yolov5s_robo_inconv.rknn-float-precompiled')
             else:
-                ret = rknn.export_rknn('./best_yolov5s_robo_inconv.rknn-int8-all-10')
+                ret = rknn.export_rknn('./best_yolov5s_robo_inconv.rknn-int8-half')
         if ret != 0:
             print('Export failed!')
             exit(ret)
         print('done')
 
-        if not FLOAT:
-            print('--> Analysis')
-            rknn.accuracy_analysis('/workspace/rockchip/RV1126_RV1109/rv1126_rv1109/external/rknn-toolkit/examples/pytorch/centernet/baiguang_anaysis.txt'
-                                    , output_dir='./snapshot', calc_qnt_error=True)
-            print('done')
+        # if not FLOAT:
+        #     print('--> Analysis')
+        #     rknn.accuracy_analysis('/workspace/rockchip/RV1126_RV1109/rv1126_rv1109/external/rknn-toolkit/examples/pytorch/centernet/baiguang_anaysis.txt'
+        #                             , output_dir='./snapshot', calc_qnt_error=True)
+        #     print('done')
