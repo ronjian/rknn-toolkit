@@ -7,7 +7,7 @@ def convert(line):
     # if idx != "71": return 
     input_size_list = [[int(each) for each in input_size.split('x')[1:]]]
     for posix in ["test", "fake"]:
-        jit_path = "/workspace/once-for-all/jiangrong/assets/jits/{}_{}.jit".format(idx, posix)
+        jit_path = "/workspace/once-for-all/jiangrong/assets/jits-new/{}_{}.jit".format(idx, posix)
         rknn_path = "/workspace/once-for-all/jiangrong/assets/rknns/{}_{}.rknn".format(idx, posix)
         if os.path.exists(rknn_path):
             print("{} already exists...".format(rknn_path))
